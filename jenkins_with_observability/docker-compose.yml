@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      JAVA_OPTS: >
+        -javaagent:/otel/opentelemetry-javaagent.jar
+        -Dotel.service.name=jenkins
+        -Dotel.exporter.otlp.endpoint=http://otel-collector:4317
+        -Dotel.metrics.exporter=otlp
+        -Dotel.logs.exporter=otlp
+        -Dotel.traces.exporter=otlp
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./otel/opentelemetry-javaagent.jar:/otel/opentelemetry-javaagent.jar
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"      # gRPC ingest
+      - "4318:4318"      # HTTP ingest
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  tempo:
+    image: grafana/tempo:2.4.1
+    container_name: tempo
+    ports:
+      - "3200:3200"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+
+volumes:
+  jenkins_home:
+  grafana_data:
