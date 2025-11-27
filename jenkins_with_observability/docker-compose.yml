@@ -57,10 +57,12 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - prometheus
       - loki
       - tempo
+
 
 volumes:
   jenkins_home:
