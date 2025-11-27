@@ -2,8 +2,8 @@
 
 To run this, you will need:
 
-* This repository cloned or otherwise available on a general Linux machine
-* the Linux system needs access to general Internet resources
+* This repository cloned or otherwise available on a machine with [Docker installed](https://docs.docker.com/get-started/get-docker/)
+* the Docker host system needs access to general Internet resources
 * an AWS account; see the note below on [AWS Environment Variables](#aws-environment-variables)
 
 ## AWS Environment Variables
