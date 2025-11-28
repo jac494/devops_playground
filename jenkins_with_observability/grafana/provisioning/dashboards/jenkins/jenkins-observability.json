@@ -1,0 +1,38 @@
+{
+  "id": null,
+  "uid": "jenkins-observability",
+  "title": "Jenkins Observability",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Build Durations",
+      "targets": [
+        {
+          "expr": "avg by (job) (jenkins_build_duration_seconds)",
+          "datasource": "Prometheus"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 6 }
+    },
+    {
+      "type": "logs",
+      "title": "Jenkins Logs",
+      "datasource": "Loki",
+      "targets": [
+        {
+          "expr": "{container=\"jenkins\"}"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 6, "w": 24, "h": 10 }
+    },
+    {
+      "type": "traces",
+      "title": "Pipeline Traces",
+      "datasource": "Tempo",
+      "gridPos": { "x": 0, "y": 16, "w": 24, "h": 12 }
+    }
+  ]
+}

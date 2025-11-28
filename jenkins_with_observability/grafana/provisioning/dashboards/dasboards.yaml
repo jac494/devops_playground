@@ -1,0 +1,17 @@
+apiVersion: 1
+
+providers:
+  - name: "Jenkins Observability"
+    folder: "Jenkins"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/jenkins
+  - name: "Platform Observability"
+    folder: "Platform"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/platform
